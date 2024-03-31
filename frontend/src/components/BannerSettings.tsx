@@ -1,13 +1,22 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {
-  AGENTS,
-  MODELS,
+  INITIAL_AGENTS,
+  INITIAL_MODELS,
   changeAgent,
   changeModel,
+  fetchAgents,
+  fetchModels,
 } from "../services/settingsService";
-import "./BannerSettings.css";
+import "./css/BannerSettings.css";
 
 function ModelSelect(): JSX.Element {
+  const [models, setModels] = useState<string[]>(INITIAL_MODELS);
+  useEffect(() => {
+    fetchModels().then((fetchedModels) => {
+      setModels(fetchedModels);
+    });
+  }, []);
+
   return (
     <select
       onChange={(e: ChangeEvent<HTMLSelectElement>) =>
@@ -15,14 +24,20 @@ function ModelSelect(): JSX.Element {
       }
       className="select max-w-xs bg-base-300 xl:w-full w-1/3"
     >
-      {MODELS.map((model) => (
-        <option>{model}</option>
+      {models.map((model) => (
+        <option key={model}>{model}</option>
       ))}
     </select>
   );
 }
 
 function AgentSelect(): JSX.Element {
+  const [agents, setAgents] = useState<string[]>(INITIAL_AGENTS);
+  useEffect(() => {
+    fetchAgents().then((fetchedAgents) => {
+      setAgents(fetchedAgents);
+    });
+  }, []);
   return (
     <select
       onChange={(e: ChangeEvent<HTMLSelectElement>) =>
@@ -30,8 +45,8 @@ function AgentSelect(): JSX.Element {
       }
       className="select max-w-xs bg-base-300 xl:w-full w-1/3"
     >
-      {AGENTS.map((agent) => (
-        <option>{agent}</option>
+      {agents.map((agent) => (
+        <option key={agent}>{agent}</option>
       ))}
     </select>
   );
